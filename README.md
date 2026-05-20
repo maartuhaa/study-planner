@@ -5,13 +5,11 @@
 Dette prosjektet er en nettbasert kalender- og planleggingsapplikasjon utviklet med Flask og MariaDB.
 
 Applikasjonen lar brukere:
-- opprette konto
-- logge inn sikkert
-- opprette og administrere oppgaver og hendelser
+- logge inn og registrere seg
+- opprette og administrere hendelser
 - vise hendelser i kalenderformat
-- organisere daglig planlegging
 
-Prosjektet er laget for å demonstrere kompetanse innen:
+Prosjektet demonstrerer kompetanse innen:
 - utvikling
 - driftstøtte
 - brukerstøtte
@@ -20,45 +18,40 @@ Prosjektet er laget for å demonstrere kompetanse innen:
 
 # Teknologier
 
-## Frontend
-- HTML
-- CSS
-- JavaScript
-
-## Backend
-- Flask (Python)
-
-## Database
+- Flask
+- HTML/CSS/JavaScript
 - MariaDB
-
-## Servermiljø
-- Ubuntu Server på Raspberry Pi
-
-## Versjonskontroll
-- Git og GitHub
+- Ubuntu Server
+- GitHub
 
 ---
 
 # Funksjoner
 
-## Brukerautentisering
-- Login-popup
-- Register-popup
-- Passordhashing
-- Brukersesjoner
-
-## Planleggingsfunksjoner
+- Login/Register popup
 - Månedskalender
-- Opprette hendelser
-- Redigere hendelser
-- Slette hendelser
-- Kommende oppgaver og hendelser
-
-## Brukergrensesnitt
-- Responsivt design
+- Opprette/redigere/slette hendelser
 - Lys/mørk modus
-- Moderne og enkelt grensesnitt
+- Responsivt design
 
 ---
 
 # Systemarkitektur
+
+Windows Laptop (Flask)
+↓
+Nettverk
+↓
+Ubuntu Raspberry Pi
+↓
+MariaDB
+
+---
+
+# Sikkerhet
+
+- Passordhashing
+- Brukersesjoner
+- Parameteriserte SQL-spørringer
+
+---
