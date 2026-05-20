@@ -38,13 +38,7 @@ Prosjektet demonstrerer kompetanse innen:
 
 # Systemarkitektur
 
-Windows Laptop (Flask)
-↓
-Nettverk
-↓
-Ubuntu Raspberry Pi
-↓
-MariaDB
+Windows Laptop (Flask), Nettverk, Ubuntu Raspberry Pi, MariaDB
 
 ---
 
