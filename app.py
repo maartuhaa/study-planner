@@ -47,12 +47,15 @@ def inject_today_events():
 def home():
 
     events = []
+    shared_events = []
     today_events = []
 
     if session.get("user_id"):
 
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
+
+        # Мої події
 
         cursor.execute(
             """
@@ -66,11 +69,44 @@ def home():
 
         events = cursor.fetchall()
 
+        # Події якими поділилися зі мною
+
+        cursor.execute(
+            """
+            SELECT
+                events.id,
+                events.title,
+                events.event_date,
+                users.username AS owner
+            FROM shared_events
+
+            JOIN events
+                ON events.id = shared_events.event_id
+
+            JOIN users
+                ON users.id = events.user_id
+
+            WHERE shared_events.shared_with_user_id = %s
+            """,
+            (session["user_id"],)
+        )
+
+        shared_events = cursor.fetchall()
+
         from datetime import date
 
         today = date.today()
 
+        # Dagens plan - мої події
+
         for event in events:
+
+            if event["event_date"] == today:
+                today_events.append(event)
+
+        # Dagens plan - спільні події
+
+        for event in shared_events:
 
             if event["event_date"] == today:
                 today_events.append(event)
@@ -81,6 +117,7 @@ def home():
     return render_template(
         "index.html",
         events=events,
+        shared_events=shared_events,
         today_events=today_events
     )
 
@@ -409,6 +446,58 @@ def profile():
         tasks_count=tasks_count,
         completed_count=completed_count
     )
+
+@app.route("/share_event/<int:event_id>", methods=["POST"])
+def share_event(event_id):
+
+    if not session.get("user_id"):
+        return redirect(url_for("home"))
+
+    username = request.form["username"]
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute(
+        """
+        SELECT id
+        FROM users
+        WHERE username = %s
+        """,
+        (username,)
+    )
+
+    user = cursor.fetchone()
+
+    if not user:
+
+        flash("Bruker finnes ikke")
+
+        cursor.close()
+        conn.close()
+
+        return redirect(url_for("home"))
+
+    cursor.execute(
+        """
+        INSERT INTO shared_events
+        (event_id, shared_with_user_id)
+        VALUES (%s, %s)
+        """,
+        (
+            event_id,
+            user["id"]
+        )
+    )
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    flash("Hendelse delt!")
+
+    return redirect(url_for("home"))
 
 if __name__ == "__main__":
     app.run(debug=True)

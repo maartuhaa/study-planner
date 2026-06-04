@@ -243,19 +243,27 @@
 
             <h2 id="share-title"></h2>
 
-            <form id="share-form" method="POST">
+            <div id="event-menu">
 
-                <input type="text" name="username" placeholder="Brukernavn">
+                <button id="show-share-form">
+                    Del hendelse
+                </button>
+
+                <a id="delete-event-btn" class="delete-btn">
+                    Slett hendelse
+                </a>
+
+            </div>
+
+            <form id="share-form" method="POST" style="display:none;">
+
+                <input type="text" name="username" placeholder="Brukernavn" required>
 
                 <button type="submit">
-                    Del
+                    Send
                 </button>
 
             </form>
-
-            <a id="delete-event-btn" class="logout-btn">
-                Slett hendelse
-            </a>
 
         </div>
 

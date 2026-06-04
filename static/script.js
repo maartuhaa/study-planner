@@ -19,20 +19,39 @@ const openEventBtn = document.getElementById("open-event");
 const shareModal = document.getElementById("share-modal");
 const shareForm = document.getElementById("share-form");
 const closeShare = document.getElementById("close-share");
+const showShareFormBtn = document.getElementById("show-share-form");
+const eventMenu = document.getElementById("event-menu");
+
+if (showShareFormBtn) {
+
+    showShareFormBtn.onclick = () => {
+
+        eventMenu.style.display = "none";
+
+        shareForm.style.display = "flex";
+
+        shareForm.style.flexDirection = "column";
+
+    };
+
+}
+
 
 function openShareModal(eventId, title) {
 
     shareModal.style.display = "flex";
 
-    document.getElementById(
-        "share-title"
-    ).textContent =
+    document.getElementById("share-title").textContent =
         title;
 
     shareForm.action =
         `/share_event/${eventId}`;
 
+    document.getElementById("delete-event-btn").href =
+        `/delete_event/${eventId}`;
+
 }
+
 
 // LOGIN
 
@@ -294,19 +313,50 @@ function renderCalendar() {
 
                             event.onclick = () => {
 
-                                const confirmDelete =
-                                    confirm(
-                                        `Slette "${eventData.title}"?`
-                                    );
-
-                                if (confirmDelete) {
-
-                                    window.location.href =
-                                        `/delete_event/${eventData.id}`;
-
-                                }
+                                openShareModal(
+                                    eventData.id,
+                                    eventData.title
+                                );
 
                             };
+
+                            dayBox.appendChild(event);
+
+                        }
+
+                    });
+
+                }
+
+                if (
+                    typeof sharedEvents !== "undefined"
+                    &&
+                    Array.isArray(sharedEvents)
+                ) {
+
+                    sharedEvents.forEach(eventData => {
+
+                        const eventDate =
+                            new Date(eventData.event_date);
+
+                        if (
+                            eventDate.getDate() === currentDay
+                            &&
+                            eventDate.getMonth() === month
+                            &&
+                            eventDate.getFullYear() === year
+                        ) {
+
+                            const event =
+                                document.createElement("div");
+
+                            event.classList.add(
+                                "event",
+                                "shared-event"
+                            );
+
+                            event.textContent =
+                                `${eventData.title} (${eventData.owner})`;
 
                             dayBox.appendChild(event);
 

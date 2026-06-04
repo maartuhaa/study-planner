@@ -10,12 +10,7 @@
 
         <form action="/add_task" method="POST">
 
-            <input
-                type="text"
-                name="title"
-                placeholder="Ny oppgave..."
-                required
-            >
+            <input type="text" name="title" placeholder="Ny oppgave..." required>
 
             <button type="submit">
                 Legg til
@@ -35,27 +30,27 @@
 
             {% for task in tasks %}
 
-                {% if task.status == "todo" %}
+            {% if task.status == "todo" %}
 
-                <div class="task-card">
+            <div class="task-card">
 
-                    <p>{{ task.title }}</p>
+                <p>{{ task.title }}</p>
 
-                    <div class="task-actions">
+                <div class="task-actions">
 
-                        <a href="/move_task/{{ task.id }}/progress">
-                            Start
-                        </a>
+                    <a href="/move_task/{{ task.id }}/progress">
+                        Start
+                    </a>
 
-                        <a href="/delete_task/{{ task.id }}">
-                            Slett
-                        </a>
-
-                    </div>
+                    <a href="/delete_task/{{ task.id }}">
+                        Slett
+                    </a>
 
                 </div>
 
-                {% endif %}
+            </div>
+
+            {% endif %}
 
             {% endfor %}
 
@@ -69,27 +64,27 @@
 
             {% for task in tasks %}
 
-                {% if task.status == "progress" %}
+            {% if task.status == "progress" %}
 
-                <div class="task-card">
+            <div class="task-card">
 
-                    <p>{{ task.title }}</p>
+                <p>{{ task.title }}</p>
 
-                    <div class="task-actions">
+                <div class="task-actions">
 
-                        <a href="/move_task/{{ task.id }}/done">
-                            Fullfør
-                        </a>
+                    <a href="/move_task/{{ task.id }}/done">
+                        Fullfør
+                    </a>
 
-                        <a href="/delete_task/{{ task.id }}">
-                            Slett
-                        </a>
-
-                    </div>
+                    <a href="/delete_task/{{ task.id }}">
+                        Slett
+                    </a>
 
                 </div>
 
-                {% endif %}
+            </div>
+
+            {% endif %}
 
             {% endfor %}
 
@@ -99,27 +94,27 @@
 
         <div class="kanban-column">
 
-           <h2>Done ({{ done_count }})</h2>
+            <h2>Done ({{ done_count }})</h2>
 
             {% for task in tasks %}
 
-                {% if task.status == "done" %}
+            {% if task.status == "done" %}
 
-                <div class="task-card">
+            <div class="task-card">
 
-                    <p>{{ task.title }}</p>
+                <p>{{ task.title }}</p>
 
-                    <div class="task-actions">
+                <div class="task-actions">
 
-                        <a href="/delete_task/{{ task.id }}">
-                            Slett
-                        </a>
-
-                    </div>
+                    <a href="/delete_task/{{ task.id }}">
+                        Slett
+                    </a>
 
                 </div>
 
-                {% endif %}
+            </div>
+
+            {% endif %}
 
             {% endfor %}
 
