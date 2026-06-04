@@ -1,0 +1,100 @@
+/* CALENDAR */
+
+.calendar-section {
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 24px;
+}
+
+.calendar-grid {
+    display: grid;
+
+    grid-template-columns: 70px repeat(7, 1fr);
+
+    gap: 12px;
+}
+
+/* HEADER */
+
+.week-label,
+.day-name {
+    text-align: center;
+
+    font-weight: 600;
+
+    padding: 12px;
+}
+
+.week-label {
+    color: gray;
+}
+
+/* WEEK NUMBER */
+
+.week-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-weight: 600;
+
+    color: gray;
+}
+
+/* DAY */
+
+.calendar-day {
+    background: #f8f8f8;
+
+    min-height: 120px;
+
+    padding: 12px;
+
+    border-radius: 18px;
+
+    transition: 0.2s;
+
+    cursor: pointer;
+}
+
+.calendar-day:hover {
+    background: #efecff;
+}
+
+.day-number {
+    font-weight: 600;
+}
+
+.empty {
+    background: transparent;
+}
+
+/* EVENTS */
+
+.event {
+    margin-top: 10px;
+
+    padding: 7px 10px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+
+    color: white;
+
+    width: fit-content;
+}
+
+.purple {
+    background: #a78bfa;
+}
+
+.blue {
+    background: #60a5fa;
+}
+
+.green {
+    background: #4ade80;
+}

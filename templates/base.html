@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planify</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <div>
+
+                <div class="logo">
+                    <h1>Planify</h1>
+                    <p>Din digitale planner</p>
+                </div>
+
+                <nav class="nav-links">
+
+                    <a href="/">
+                        <i class="fa-regular fa-calendar"></i>
+                        Kalender
+                    </a>
+
+                    <a href="/oppgaver">
+                        <i class="fa-solid fa-list-check"></i>
+                        Oppgaver
+                    </a>
+
+                </nav>
+
+            </div>
+
+            <div class="sidebar-bottom">
+
+                <div class="daily-planner">
+
+                    <h2>Dagens plan</h2>
+
+                    <div class="planner-item">
+                        <span>09:00</span>
+                        <p>Møte med team</p>
+                    </div>
+
+                    <div class="planner-item">
+                        <span>13:00</span>
+                        <p>Trening</p>
+                    </div>
+
+                    <div class="planner-item">
+                        <span>18:00</span>
+                        <p>Lekser</p>
+                    </div>
+
+                </div>
+
+                <button id="theme-toggle">
+                    <i class="fa-solid fa-moon"></i>
+                    Tema
+                </button>
+
+            </div>
+
+        </aside>
+
+        <main class="main-content">
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="flash-message">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <header class="topbar">
+
+                <div class="month-navigation">
+
+                    <button id="prev-month">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <h2 id="current-date">
+                        Juni 2026
+                    </h2>
+
+                    <button id="next-month">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                </div>
+
+                <div class="top-buttons">
+
+                    {% if session.get("user_id") %}
+
+                    <span class="user-greeting">
+                        Hei, {{ session["username"] }}
+                    </span>
+
+                    <button id="open-event">
+                        Ny hendelse
+                    </button>
+
+                    <a href="/logout" class="logout-btn">
+                        Logg ut
+                    </a>
+
+                    {% else %}
+
+                    <button id="open-login">
+                        Logg inn
+                    </button>
+
+                    <button id="open-register-btn">
+                        Registrer
+                    </button>
+
+                    {% endif %}
+
+                </div>
+
+            </header>
+
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
+
+    <!-- LOGIN -->
+
+    <div class="modal" id="login-modal">
+
+        <div class="modal-content">
+
+            <span class="close-btn" id="close-login">&times;</span>
+
+            <h2>Logg inn</h2>
+
+            <form action="/login" method="POST">
+
+                <input type="text" name="username" placeholder="Brukernavn" required>
+
+                <input type="password" name="password" placeholder="Passord" required>
+
+                <button type="submit">
+                    Logg inn
+                </button>
+
+            </form>
+
+            <p class="register-text">
+
+                Har du ikke konto?
+
+                <span id="open-register">
+                    Registrer deg
+                </span>
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- REGISTER -->
+
+    <div class="modal" id="register-modal">
+
+        <div class="modal-content">
+
+            <span class="close-btn" id="close-register">&times;</span>
+
+            <h2>Registrer deg</h2>
+
+            <form action="/register" method="POST">
+
+                <input type="text" name="username" placeholder="Brukernavn" required>
+
+                <input type="password" name="password" placeholder="Passord" required>
+
+                <button type="submit">
+                    Opprett konto
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- EVENT -->
+
+    <form action="/add_event" method="POST">
+
+        <input type="text" name="title" placeholder="Tittel" required>
+
+        <input type="date" name="event_date" required>
+
+        <button type="submit">
+            Lagre
+        </button>
+
+    </form>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>
