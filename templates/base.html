@@ -48,28 +48,29 @@
 
                     <h2>Dagens plan</h2>
 
-                    <div class="planner-item">
-                        <span>09:00</span>
-                        <p>Møte med team</p>
-                    </div>
+                    {% if today_events %}
+
+                    {% for event in today_events %}
 
                     <div class="planner-item">
-                        <span>13:00</span>
-                        <p>Trening</p>
+
+                        <p>{{ event.title }}</p>
+
                     </div>
 
+                    {% endfor %}
+
+                    {% else %}
+
                     <div class="planner-item">
-                        <span>18:00</span>
-                        <p>Lekser</p>
+
+                        <p>Ingen hendelser i dag</p>
+
                     </div>
+
+                    {% endif %}
 
                 </div>
-
-                <button id="theme-toggle">
-                    <i class="fa-solid fa-moon"></i>
-                    Tema
-                </button>
-
             </div>
 
         </aside>
@@ -108,9 +109,9 @@
 
                     {% if session.get("user_id") %}
 
-                    <span class="user-greeting">
+                    <a href="/profil" class="user-greeting">
                         Hei, {{ session["username"] }}
-                    </span>
+                    </a>
 
                     <button id="open-event">
                         Ny hendelse
@@ -207,17 +208,59 @@
 
     <!-- EVENT -->
 
-    <form action="/add_event" method="POST">
+    <div class="modal" id="event-modal">
 
-        <input type="text" name="title" placeholder="Tittel" required>
+        <div class="modal-content">
 
-        <input type="date" name="event_date" required>
+            <span class="close-btn" id="close-event">&times;</span>
 
-        <button type="submit">
-            Lagre
-        </button>
+            <h2>Ny hendelse</h2>
 
-    </form>
+            <form action="/add_event" method="POST">
+
+                <input type="text" name="title" placeholder="Tittel" required>
+
+                <input type="date" name="event_date" required>
+
+
+                <button type="submit">
+                    Lagre
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="modal" id="share-modal">
+
+        <div class="modal-content">
+
+            <span class="close-btn" id="close-share">
+                &times;
+            </span>
+
+            <h2 id="share-title"></h2>
+
+            <form id="share-form" method="POST">
+
+                <input type="text" name="username" placeholder="Brukernavn">
+
+                <button type="submit">
+                    Del
+                </button>
+
+            </form>
+
+            <a id="delete-event-btn" class="logout-btn">
+                Slett hendelse
+            </a>
+
+        </div>
+
+    </div>
+
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 

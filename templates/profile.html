@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="profile-page">
+
+    <div class="profile-card">
+
+        <h1>{{ user.username }}</h1>
+
+        <p>Medlem siden: {{ user.created_at.strftime('%d.%m.%Y') }}</p>
+
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <h2>{{ events_count }}</h2>
+
+            <p>Hendelser</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h2>{{ tasks_count }}</h2>
+
+            <p>Oppgaver</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h2>{{ completed_count }}</h2>
+
+            <p>Fullførte</p>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

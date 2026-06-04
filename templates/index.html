@@ -2,12 +2,13 @@
 
 {% block content %}
 
+<script>
+    const events = {{ events | tojson }};
+</script>
+
 <section class="calendar-section">
 
-    <div
-        class="calendar-grid"
-        id="calendar"
-    >
+    <div class="calendar-grid" id="calendar">
 
     </div>
 

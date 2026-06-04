@@ -271,3 +271,19 @@ body.dark {
     color: var(--accent);
     cursor: pointer;
 }
+
+.daily-planner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.planner-item {
+    background: white;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    font-size: 14px;
+}

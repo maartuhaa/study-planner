@@ -4,21 +4,126 @@
 
 <section class="tasks-page">
 
-    <h1>Oppgaver</h1>
+    <div class="tasks-header">
 
-    <div class="task-card">
+        <h1>Oppgaver</h1>
 
-        <h3>Fullfør prosjekt</h3>
+        <form action="/add_task" method="POST">
 
-        <p>Frist: 15 juni</p>
+            <input
+                type="text"
+                name="title"
+                placeholder="Ny oppgave..."
+                required
+            >
+
+            <button type="submit">
+                Legg til
+            </button>
+
+        </form>
 
     </div>
 
-    <div class="task-card">
+    <div class="kanban-board">
 
-        <h3>Treningsøkt</h3>
+        <!-- TODO -->
 
-        <p>Frist: 16 juni</p>
+        <div class="kanban-column">
+
+            <h2>To do ({{ todo_count }})</h2>
+
+            {% for task in tasks %}
+
+                {% if task.status == "todo" %}
+
+                <div class="task-card">
+
+                    <p>{{ task.title }}</p>
+
+                    <div class="task-actions">
+
+                        <a href="/move_task/{{ task.id }}/progress">
+                            Start
+                        </a>
+
+                        <a href="/delete_task/{{ task.id }}">
+                            Slett
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+        <!-- IN PROGRESS -->
+
+        <div class="kanban-column">
+
+            <h2>In progress ({{ progress_count }})</h2>
+
+            {% for task in tasks %}
+
+                {% if task.status == "progress" %}
+
+                <div class="task-card">
+
+                    <p>{{ task.title }}</p>
+
+                    <div class="task-actions">
+
+                        <a href="/move_task/{{ task.id }}/done">
+                            Fullfør
+                        </a>
+
+                        <a href="/delete_task/{{ task.id }}">
+                            Slett
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+        <!-- DONE -->
+
+        <div class="kanban-column">
+
+           <h2>Done ({{ done_count }})</h2>
+
+            {% for task in tasks %}
+
+                {% if task.status == "done" %}
+
+                <div class="task-card">
+
+                    <p>{{ task.title }}</p>
+
+                    <div class="task-actions">
+
+                        <a href="/delete_task/{{ task.id }}">
+                            Slett
+                        </a>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
 
     </div>
 

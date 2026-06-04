@@ -16,6 +16,23 @@ const closeEventBtn = document.getElementById("close-event");
 
 const openEventBtn = document.getElementById("open-event");
 
+const shareModal = document.getElementById("share-modal");
+const shareForm = document.getElementById("share-form");
+const closeShare = document.getElementById("close-share");
+
+function openShareModal(eventId, title) {
+
+    shareModal.style.display = "flex";
+
+    document.getElementById(
+        "share-title"
+    ).textContent =
+        title;
+
+    shareForm.action =
+        `/share_event/${eventId}`;
+
+}
 
 // LOGIN
 
@@ -93,18 +110,10 @@ window.onclick = (event) => {
 // CALENDAR
 // =====================
 
-const calendar =
-    document.getElementById("calendar");
-
-const currentDateText =
-    document.getElementById("current-date");
-
-
-
-// MONTHS
+const calendar = document.getElementById("calendar");
+const currentDateText = document.getElementById("current-date");
 
 const months = [
-
     "Januar",
     "Februar",
     "Mars",
@@ -117,15 +126,9 @@ const months = [
     "Oktober",
     "November",
     "Desember"
-
 ];
 
-
-
-// DAYS
-
 const days = [
-
     "Man",
     "Tir",
     "Ons",
@@ -133,46 +136,29 @@ const days = [
     "Fre",
     "Lør",
     "Søn"
-
 ];
-
-
-
-// CURRENT DATE
 
 let currentDate = new Date();
 
-
-
-// RENDER CALENDAR
-
 function renderCalendar() {
+
+    if (!calendar) return;
 
     calendar.innerHTML = "";
 
-    const year =
-        currentDate.getFullYear();
-
-    const month =
-        currentDate.getMonth();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
 
     currentDateText.textContent =
         `${months[month]} ${year}`;
 
-    // =====================
     // HEADER
-    // =====================
 
-    const weekLabel =
-        document.createElement("div");
-
+    const weekLabel = document.createElement("div");
     weekLabel.classList.add("week-label");
-
     weekLabel.textContent = "Uke";
 
     calendar.appendChild(weekLabel);
-
-
 
     days.forEach(day => {
 
@@ -180,18 +166,13 @@ function renderCalendar() {
             document.createElement("div");
 
         dayElement.classList.add("day-name");
-
         dayElement.textContent = day;
 
         calendar.appendChild(dayElement);
 
     });
 
-
-
-    // =====================
-    // MONTH INFO
-    // =====================
+    // DATE INFO
 
     const firstDay =
         new Date(year, month, 1);
@@ -199,45 +180,33 @@ function renderCalendar() {
     let startingDay =
         firstDay.getDay();
 
-    // FIX SUNDAY
-
     startingDay =
         startingDay === 0
-        ? 6
-        : startingDay - 1;
+            ? 6
+            : startingDay - 1;
 
     const daysInMonth =
-        new Date(year, month + 1, 0)
-        .getDate();
+        new Date(year, month + 1, 0).getDate();
 
     const today =
         new Date();
 
     let dayCount = 1;
 
-   let currentWeek =
-    getWeekNumber(firstDay);
+    let currentWeek =
+        getWeekNumber(firstDay);
 
-
-
-    // =====================
     // CALENDAR LOOP
-    // =====================
 
     while (dayCount <= daysInMonth) {
-
-        // WEEK NUMBER
 
         const weekNumber =
             document.createElement("div");
 
         weekNumber.classList.add("week-number");
-
         weekNumber.textContent = currentWeek;
 
         calendar.appendChild(weekNumber);
-
-
 
         for (let i = 0; i < 7; i++) {
 
@@ -246,11 +215,11 @@ function renderCalendar() {
 
             dayBox.classList.add("calendar-day");
 
-
-
-            // EMPTY BOXES
-
-           if (currentWeek === getWeekNumber(firstDay) && i < startingDay){
+            if (
+                currentWeek === getWeekNumber(firstDay)
+                &&
+                i < startingDay
+            ) {
 
                 dayBox.classList.add("empty");
 
@@ -264,56 +233,88 @@ function renderCalendar() {
 
             else {
 
-                // DAY NUMBER
+                const currentDay = dayCount;
 
                 const dayNumber =
                     document.createElement("span");
 
                 dayNumber.classList.add("day-number");
-
-                dayNumber.textContent =
-                    dayCount;
+                dayNumber.textContent = currentDay;
 
                 dayBox.appendChild(dayNumber);
-
-
 
                 // TODAY
 
                 if (
-
-                    dayCount === today.getDate()
+                    currentDay === today.getDate()
                     &&
                     month === today.getMonth()
                     &&
                     year === today.getFullYear()
-
                 ) {
 
                     dayBox.classList.add("today");
 
                 }
 
+                // EVENTS FROM DATABASE
 
+                if (
+                    typeof events !== "undefined"
+                    &&
+                    Array.isArray(events)
+                ) {
 
+                    events.forEach(eventData => {
 
-                if (dayCount === 20) {
+                        const eventDate =
+                            new Date(eventData.event_date);
 
-                    const event =
-                        document.createElement("div");
+                        if (
+                            eventDate.getDate() === currentDay
+                            &&
+                            eventDate.getMonth() === month
+                            &&
+                            eventDate.getFullYear() === year
+                        ) {
 
-                    event.classList.add(
-                        "event",
-                        "green"
-                    );
+                            const event =
+                                document.createElement("div");
 
-                    event.textContent = "Lekser";
+                            event.classList.add("event");
 
-                    dayBox.appendChild(event);
+                            event.textContent =
+                                eventData.title;
+
+                            event.dataset.id =
+                                eventData.id;
+
+                            event.title =
+                                "Klikk for å slette";
+
+                            event.onclick = () => {
+
+                                const confirmDelete =
+                                    confirm(
+                                        `Slette "${eventData.title}"?`
+                                    );
+
+                                if (confirmDelete) {
+
+                                    window.location.href =
+                                        `/delete_event/${eventData.id}`;
+
+                                }
+
+                            };
+
+                            dayBox.appendChild(event);
+
+                        }
+
+                    });
 
                 }
-
-
 
                 dayCount++;
 
@@ -323,23 +324,22 @@ function renderCalendar() {
 
         }
 
-       currentWeek++;
+        currentWeek++;
 
     }
 
 }
 
-
 function getWeekNumber(date) {
 
-    const tempDate = new Date(date);
+    const tempDate =
+        new Date(date);
 
     tempDate.setHours(0, 0, 0, 0);
 
     tempDate.setDate(
-        tempDate.getDate() + 3 - (
-            tempDate.getDay() + 6
-        ) % 7
+        tempDate.getDate() + 3 -
+        (tempDate.getDay() + 6) % 7
     );
 
     const week1 =
@@ -358,36 +358,41 @@ function getWeekNumber(date) {
         ) / 7
 
     );
+
 }
-
-
 
 renderCalendar();
 
+const prevBtn =
+    document.getElementById("prev-month");
 
+const nextBtn =
+    document.getElementById("next-month");
 
-// =====================
-// MONTH SWITCH
-// =====================
+if (prevBtn) {
 
-document.getElementById("prev-month").onclick = () => {
+    prevBtn.onclick = () => {
 
-    currentDate.setMonth(
-        currentDate.getMonth() - 1
-    );
+        currentDate.setMonth(
+            currentDate.getMonth() - 1
+        );
 
-    renderCalendar();
+        renderCalendar();
 
-};
+    };
 
+}
 
+if (nextBtn) {
 
-document.getElementById("next-month").onclick = () => {
+    nextBtn.onclick = () => {
 
-    currentDate.setMonth(
-        currentDate.getMonth() + 1
-    );
+        currentDate.setMonth(
+            currentDate.getMonth() + 1
+        );
 
-    renderCalendar();
+        renderCalendar();
 
-};
+    };
+
+}
